@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Skin Cancer Detection • Visual Dashboard Case Study</title>
+  <meta name="description" content="Interactive case study for the Skin Cancer Detection dashboard featuring outputs, report snapshot, and the full Colab script." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="./styles.css" />
+  <script>
+    document.documentElement.classList.add('has-js');
+  </script>
+  <script src="./config.js"></script>
+</head>
+<body class="detail-page">
+  <div class="scroll-tracker" aria-hidden="true"></div>
+  <div class="cursor-orb" aria-hidden="true"></div>
+  <div class="background-gradient" aria-hidden="true"></div>
+
+  <header>
+    <a class="back-link" href="./index.html#projects">← Back to portfolio</a>
+    <div class="detail-hero-grid">
+      <div>
+        <p class="detail-label">Case Study · Medical Imaging</p>
+        <h1>Skin Cancer Detection visual dashboard.</h1>
+        <p class="lead">
+          Upload a lightweight Keras model and 3–8 dermoscopic scans, then ship a dark-mode report with
+          probabilities, charts, CSV, and a zipped evidence pack—no local setup required.
+        </p>
+        <ul class="detail-meta">
+          <li>Real predictions if a .keras/.h5 model is provided</li>
+          <li>Demo mode with deterministic mock data for portfolio walkthroughs</li>
+          <li>Designed for Google Colab / Kaggle notebooks (online compiler style)</li>
+        </ul>
+        <div class="cta-group">
+          <a class="btn btn-primary" data-magnetic href="https://colab.research.google.com/" target="_blank" rel="noopener">Open in Google Colab</a>
+        </div>
+      </div>
+      <aside class="detail-hero-card" aria-label="Latest run summary">
+        <p class="detail-label">Latest demo run</p>
+        <h3>5 lesions · 60% avg malignant score</h3>
+        <ul>
+          <li><span>3x</span> flagged as <strong>Cancer</strong> (≥50%)</li>
+          <li><span>2x</span> tracked as <strong>Not Cancer</strong></li>
+          <li>ZIP bundle + CSV exported at 4.8&nbsp;MB</li>
+          <li>Grad-CAM overlay auto-enables for compatible backbones</li>
+        </ul>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section class="section detail-section reveal" data-section>
+      <h2>Dashboard outputs</h2>
+      <p class="lead">Every run leaves a defensible paper trail for teammates, professors, or clinicians reviewing the pipeline.</p>
+      <div class="detail-grid">
+        <div class="detail-card">
+          <h4>Prediction cards</h4>
+          <p>Cancer vs Not Cancer labels, confidence bars, and filename overlays rendered in a cinematic gallery.</p>
+        </div>
+        <div class="detail-card">
+          <h4>Dark gallery</h4>
+          <p>Lesion tiles are aligned, labeled, and exported as <code>pred_gallery.png</code> for quick sharing.</p>
+        </div>
+        <div class="detail-card">
+          <h4>Risk strip</h4>
+          <p>Top 3 lesions sorted by malignant probability with warning borders and percent callouts.</p>
+        </div>
+        <div class="detail-card">
+          <h4>Summary panel</h4>
+          <p>Pie chart + histogram showing benign vs malignant counts and the probability distribution.</p>
+        </div>
+        <div class="detail-card">
+          <h4>Structured CSV</h4>
+          <p><code>predictions.csv</code> lists filename, class, malignant %, and benign % for downstream QA.</p>
+        </div>
+        <div class="detail-card">
+          <h4>ZIP evidence</h4>
+          <p>Cards, charts, and CSV are bundled into <code>skin_cancer_outputs.zip</code> with a manual download button.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section detail-section reveal" data-section>
+      <h2>Latest report snapshot</h2>
+      <div class="result-grid">
+        <div class="detail-card">
+          <h4>Prediction table</h4>
+          <table class="result-table">
+            <thead>
+              <tr>
+                <th>Image</th>
+                <th>Prediction</th>
+                <th>Malignant %</th>
+                <th>Benign %</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>lesion_A.png</td>
+                <td>Cancer</td>
+                <td>82.6%</td>
+                <td>17.4%</td>
+              </tr>
+              <tr>
+                <td>lesion_B.png</td>
+                <td>Not Cancer</td>
+                <td>31.8%</td>
+                <td>68.2%</td>
+              </tr>
+              <tr>
+                <td>lesion_C.png</td>
+                <td>Cancer</td>
+                <td>64.3%</td>
+                <td>35.7%</td>
+              </tr>
+              <tr>
+                <td>lesion_D.png</td>
+                <td>Not Cancer</td>
+                <td>18.9%</td>
+                <td>81.1%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="detail-card">
+          <h4>Report callouts</h4>
+          <ul class="result-list">
+            <li>Average malignant confidence hovered at <strong>60.1%</strong>.</li>
+            <li>ZIP delivery keeps reviewers from hunting through multiple tabs.</li>
+            <li>Grad-CAM overlay toggles on automatically if the uploaded model architecture exposes convolutional maps.</li>
+            <li>All visuals render with the same neon-dark styling as the main site for branding consistency.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section detail-section reveal" data-section>
+      <h2>Workflow</h2>
+      <div class="workflow-steps">
+        <article class="workflow-step">
+          <p class="detail-label">Step 01</p>
+          <h3>Upload optional model</h3>
+          <p>Drop a trained <code>.keras</code> or <code>.h5</code> file into the notebook to swap demo probabilities for real predictions.</p>
+        </article>
+        <article class="workflow-step">
+          <p class="detail-label">Step 02</p>
+          <h3>Load 3–8 lesion images</h3>
+          <p>Images are resized to 224×224, normalized, and queued for inference or deterministic mock scoring.</p>
+        </article>
+        <article class="workflow-step">
+          <p class="detail-label">Step 03</p>
+          <h3>Generate deliverables</h3>
+          <p>Gallery, risk strip, summary, CSV, individual cards, and a ZIP bundle are rendered with timestamped headers.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section detail-section reveal" data-section>
+      <div class="code-panel">
+        <div>
+          <p class="detail-label">Online compiler friendly</p>
+          <h2>Run the Colab-ready script</h2>
+          <p class="lead">
+            Launch Google Colab, choose <em>Upload</em>, and paste the script below into a new notebook cell. Everything else—UI,
+            downloads, and report visuals—is handled for you.
+          </p>
+        </div>
+        <div class="code-actions">
+          <a class="btn btn-secondary" data-magnetic href="./skin-cancer-dashboard.py" download>
+            Download <code>skin-cancer-dashboard.py</code>
+          </a>
+          <button id="copy-code" class="ghost-btn" type="button">Copy code</button>
+        </div>
+        <pre class="code-block" aria-live="polite"><code id="skin-cancer-code">Loading script…</code></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> Jayanth Eapen Thomas · Skin Cancer Detection case study.
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const codeEl = document.getElementById('skin-cancer-code');
+      const copyBtn = document.getElementById('copy-code');
+
+      fetch('./skin-cancer-dashboard.py')
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('Unable to load script');
+          }
+          return res.text();
+        })
+        .then((text) => {
+          codeEl.textContent = text.trim();
+        })
+        .catch(() => {
+          codeEl.textContent = 'Download the script instead — unable to load preview.';
+        });
+
+      if (copyBtn) {
+        copyBtn.addEventListener('click', async () => {
+          try {
+            await navigator.clipboard.writeText(codeEl.textContent);
+            copyBtn.textContent = 'Copied!';
+            setTimeout(() => {
+              copyBtn.textContent = 'Copy code';
+            }, 2400);
+          } catch (error) {
+            copyBtn.textContent = 'Copy failed';
+            setTimeout(() => {
+              copyBtn.textContent = 'Copy code';
+            }, 2400);
+          }
+        });
+      }
+    });
+  </script>
+  <script src="./script.js"></script>
+</body>
+</html>

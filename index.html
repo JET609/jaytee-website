@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jayanth Eapen Thomas &bull; Portfolio</title>
+
+  <meta
+    name="description"
+    content="Portfolio website for Jayanth Eapen Thomas &ndash; a developer crafting immersive, animated, and technically sharp digital experiences."
+  />
+  <meta name="theme-color" content="#020817" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="./styles.css" />
+
+  <script>
+    document.documentElement.classList.add('has-js');
+  </script>
+  <script src="./config.js"></script>
+</head>
+<body>
+  <!-- UI chrome -->
+  <div class="scroll-tracker" aria-hidden="true"></div>
+  <div class="cursor-orb" aria-hidden="true"></div>
+  <div class="background-gradient" aria-hidden="true"></div>
+  <div class="code-lines" aria-hidden="true"></div>
+  <div class="language-particles" aria-hidden="true"></div>
+
+  <!-- HERO -->
+  <header>
+    <div class="hero">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="hero-badge" data-tilt data-tilt-strength="10" data-tilt-scale="1.02">
+            B.Tech CSE &bull; 2022&ndash;26
+          </div>
+          <h1>Student engineer obsessed with software, systems, and curious builds.</h1>
+          <p>
+            I&rsquo;m Jayanth, a B.Tech CSE student who treats side projects like mini products. Most weeks I&rsquo;m either
+            building ML prototypes, refining web dashboards, or scripting away repetitive campus chores—then documenting
+            everything so it&rsquo;s reproducible.
+          </p>
+          <ul class="hero-meta">
+            <li>Final-year B.Tech CSE · Kerala, India (IST)</li>
+            <li>AI · Web · Automation · Systems</li>
+            <li><a href="mailto:jayaththomas2004@gmail.com">jayaththomas2004@gmail.com</a></li>
+          </ul>
+          <div class="cta-group">
+            <a class="btn btn-primary" data-magnetic href="#projects">See my projects &rarr;</a>
+            <a class="btn btn-secondary" data-magnetic href="#contact">Contact me</a>
+            <a
+              class="btn btn-secondary"
+              data-magnetic
+              href="https://github.com/JET609"
+              target="_blank"
+              rel="noopener"
+            >
+              GitHub profile
+            </a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat" data-tilt data-tilt-strength="12" data-tilt-scale="1.04">
+              <span class="stat-number" data-count-to="12" data-count-suffix="+">12+</span>
+              <span class="stat-label">Automation scripts for peers</span>
+            </div>
+            <div class="stat" data-tilt data-tilt-strength="12" data-tilt-scale="1.04">
+              <span class="stat-number" data-count-to="5" data-count-suffix="+">5+</span>
+              <span class="stat-label">Collab builds with student groups</span>
+            </div>
+            <div class="stat" data-tilt data-tilt-strength="12" data-tilt-scale="1.04">
+              <span class="stat-number" data-count-to="3" data-count-suffix="+">3+</span>
+              <span class="stat-label">Live demos shared in class</span>
+            </div>
+          </div>
+          <div class="hero-trust">
+            <div class="trust-pill">
+              <span class="pulse-dot"></span>
+              Status: Building AI &amp; automation projects
+            </div>
+            <div class="trust-pill">
+              <span class="pulse-dot is-green"></span>
+              Focus: Deep work, consistency, clean repos
+            </div>
+            <div class="trust-pill">
+              <span class="pulse-dot is-purple"></span>
+              Philosophy: Ship small, complete stories
+            </div>
+          </div>
+        </div>
+        <aside class="hero-panel" data-tilt data-tilt-strength="8" data-tilt-scale="1.02">
+          <div class="panel-holo" aria-hidden="true"></div>
+          <div class="signal-card live-status">
+            <span class="signal-pill">Now learning</span>
+            <h3>Final-year CSE student</h3>
+            <p>Focused on getting better at full-stack builds, ML basics, and polished UIs that just work.</p>
+          </div>
+          <div class="signal-card availability">
+            <div class="status-dot is-open">Available for internships</div>
+            <p>Looking for Summer/Fall 2025 roles in software, data, or product engineering.</p>
+            <a class="btn btn-secondary btn-availability" href="mailto:jayaththomas2004@gmail.com" data-magnetic>Share an opportunity</a>
+          </div>
+          <div class="signal-card stack-pulse">
+            <p class="stack-label">Stack pulse &mdash; student edition</p>
+            <div class="chip-row tech-chips">
+              <span class="chip" data-tech="python">Python</span>
+              <span class="chip" data-tech="java">Java</span>
+              <span class="chip" data-tech="javascript">JavaScript</span>
+              <span class="chip" data-tech="react">React</span>
+              <span class="chip" data-tech="flutter">Flutter</span>
+              <span class="chip" data-tech="sql">SQL</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </header>
+
+  <!-- NAV -->
+  <nav>
+    <span class="nav-indicator" aria-hidden="true"></span>
+    <a href="#about" data-nav-link="about">About</a>
+    <a href="#skills" data-nav-link="skills">Skills</a>
+    <a href="#experience" data-nav-link="experience">Experience</a>
+    <a href="#projects" data-nav-link="projects">Projects</a>
+    <a href="#contact" data-nav-link="contact">Contact</a>
+  </nav>
+
+  <!-- ABOUT -->
+  <section id="about" class="section reveal" data-section data-scroll-speed="0.12">
+    <div class="glass-card about-grid" data-tilt data-tilt-strength="8" data-tilt-scale="1.01">
+      <div>
+        <h2>About Me</h2>
+        <p class="lead">
+          I keep a tight feedback loop between coursework and GitHub. Every concept eventually becomes a CLI, dashboard,
+          or ML demo that someone else can fork. Clean READMEs, reproducible pipelines, and thoughtful automation are the
+          through-lines across everything I ship.
+        </p>
+        <div class="pill-group">
+          <span class="pill">Automation &amp; AI</span>
+          <span class="pill">Modern web dashboards</span>
+          <span class="pill">ML + analytics</span>
+          <span class="pill">Systems curiosity</span>
+        </div>
+      </div>
+      <div class="highlights">
+        <div class="highlight">⚙️ Automation &amp; AI: scripts and YOLO pipelines that eliminate repetitive campus work.</div>
+        <div class="highlight">📚 DSA + project repos: curated notes, patterns, and revision-friendly code.</div>
+        <div class="highlight">✍️ Writing + sharing: documenting builds like the skin-cancer pipeline on Medium.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills" class="section reveal" data-section data-scroll-speed="0.11">
+    <h2>Skills &amp; tools</h2>
+    <p class="lead">A balanced stack for prototyping quickly and maintaining projects long after demo day.</p>
+    <div class="skills-grid">
+      <div class="skill-card" data-tilt>
+        <h4>Frontend</h4>
+        <ul>
+          <li>React, Next.js, Vite</li>
+          <li>TypeScript, modern JS</li>
+          <li>Framer Motion, GSAP-style micro FX</li>
+        </ul>
+      </div>
+      <div class="skill-card" data-tilt>
+        <h4>Backend &amp; infra</h4>
+        <ul class="tech-token-list">
+          <li>
+            <span class="tech-token" data-tech="node">Node.js</span>,
+            <span class="tech-token" data-tech="python">Python (FastAPI)</span>
+          </li>
+          <li>
+            <span class="tech-token" data-tech="rest">REST</span>
+            /
+            <span class="tech-token" data-tech="graphql">GraphQL</span>
+            <span class="tech-token" data-tech="api">APIs</span>
+          </li>
+          <li>
+            <span class="tech-token" data-tech="docker">Docker</span>,
+            <span class="tech-token" data-tech="github">GitHub Actions</span>
+          </li>
+        </ul>
+      </div>
+      <div class="skill-card" data-tilt>
+        <h4>Data &amp; AI</h4>
+        <ul>
+          <li>LLM integration &amp; tooling</li>
+          <li>TensorFlow / PyTorch basics</li>
+          <li>Analytics &amp; dashboards</li>
+        </ul>
+      </div>
+      <div class="skill-card" data-tilt>
+        <h4>Workflow</h4>
+        <ul>
+          <li>Clean, modular codebases</li>
+          <li>Docs &amp; README polish</li>
+          <li>Mentoring &amp; code reviews</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience" class="section reveal" data-section data-scroll-speed="0.09">
+    <h2>Experience &amp; involvement</h2>
+    <p class="lead">
+      Hands-on learning through hackathons, research symposiums, and student initiatives that forced me to ship fast.
+    </p>
+    <div class="timeline">
+      <div class="timeline-item" data-tilt>
+        <small>2025 &mdash; Present</small>
+        <h3>AI tools &amp; automations</h3>
+        <p>Refining ML pipelines, workflow bots, and the public profile around them—aiming for hosted, user-ready builds.</p>
+      </div>
+      <div class="timeline-item" data-tilt>
+        <small>2024</small>
+        <h3>ML experiments &amp; infra curiosity</h3>
+        <p>Built YOLO detections, skin-cancer CNNs, and started caring about deployment, GitHub automation, and clean docs.</p>
+      </div>
+      <div class="timeline-item" data-tilt>
+        <small>2023</small>
+        <h3>Web dev + DSA breakthroughs</h3>
+        <p>React dashboards, first freelance-style briefs, and a DSA notebook that keeps interview prep honest.</p>
+      </div>
+      <div class="timeline-item" data-tilt>
+        <small>2022</small>
+        <h3>Foundations</h3>
+        <p>Python, C, and automation scripts for friends—discovering how fun it is to solve tiny annoyances with code.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects" class="section reveal" data-section data-scroll-speed="0.12">
+    <h2>Projects</h2>
+    <div class="section-intro">
+      <p>Selected builds that combined research, UX, and code while balancing college deadlines.</p>
+    </div>
+    <div class="projects-list">
+      <div class="project-card" data-tilt>
+        <h3>Skin Cancer Detection</h3>
+        <p>CNN-based HAM10000 workflow with proper preprocessing, training scripts, and documentation for reproducible results.</p>
+        <div class="project-links">
+          <a class="project-link" href="./skin-cancer.html">View</a>
+        </div>
+      </div>
+      <div class="project-card" data-tilt>
+        <h3>Fake News Detector</h3>
+        <p>End-to-end NLP project that cleans text, vectorizes with TF-IDF, and evaluates multiple classifiers with clear metrics.</p>
+      </div>
+      <div class="project-card" data-tilt>
+        <h3>Portfolio Site</h3>
+        <p>Neat React/Tailwind experience that mirrors this site&rsquo;s tone, complete with responsive layouts and deployment steps.</p>
+      </div>
+      <div class="project-card" data-tilt>
+        <h3>DSA Repo</h3>
+        <p>Revision-friendly notebook of patterns, notes, and multi-language solutions used for interviews and mentoring juniors.</p>
+      </div>
+    </div>
+    <div class="projects-footer">
+      <a
+        class="btn btn-secondary"
+        href="https://github.com/JET609?tab=repositories"
+        target="_blank"
+        rel="noopener"
+        data-magnetic
+      >
+        View all projects
+      </a>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="section reveal" data-section data-scroll-speed="0.15">
+    <div class="contact-card" data-tilt data-tilt-scale="1.05">
+      <h3>Let&rsquo;s build something useful together.</h3>
+      <p>
+        I&rsquo;m available for internships, freelance prototypes, and collaborations with student clubs or early teams.
+        Share the brief and I&rsquo;ll respond with timelines, ideas, and next steps.
+      </p>
+      <div class="contact-options">
+        <a href="mailto:jayaththomas2004@gmail.com" data-platform="email" data-magnetic>Email</a>
+        <a href="https://www.linkedin.com/in/jayanth-e-thomas-027318221/" target="_blank" rel="noopener" data-platform="linkedin" data-magnetic>LinkedIn</a>
+        <a href="https://github.com/JET609" target="_blank" rel="noopener" data-platform="github" data-magnetic>GitHub</a>
+        <a href="https://medium.com/@jayanththomas2004" target="_blank" rel="noopener" data-platform="medium" data-magnetic>Medium</a>
+      </div>
+    </div>
+    <div class="spotify-card" data-tilt data-tilt-scale="1.03">
+      <div class="spotify-meta">
+        <p class="detail-label">Now playing</p>
+        <h4>Deep focus playlist</h4>
+        <p>Rotating mix that keeps the late-night shipping energy steady.</p>
+      </div>
+      <div class="spotify-embed" data-spotify>
+        <div class="spotify-loading" aria-live="polite">
+          <span class="spinner" aria-hidden="true"></span>
+          Preparing the playlist…
+        </div>
+        <iframe
+          title="Spotify playlist"
+          data-src="https://open.spotify.com/embed/playlist/37i9dQZF1DX4WYpdgoIcn6?utm_source=generator"
+          width="100%"
+          height="152"
+          frameborder="0"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy"
+        ></iframe>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    &copy; <span id="year"></span> Jayanth Eapen Thomas &middot; Student portfolio crafted with curiosity.
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>

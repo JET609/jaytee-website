@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const nav = document.querySelector('nav');
   const navIndicator = nav ? nav.querySelector('.nav-indicator') : null;
   let activeNavLink;
+  let setActiveNavLink = () => {};
   let heroTiltInitialized = false;
   let parallaxInitialized = false;
 
@@ -433,6 +434,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
 
+    setActiveNavLink = setActive;
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -556,7 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const offsetTop = target.getBoundingClientRect().top + window.scrollY - navOffset();
         const navKey = link.dataset.navLink;
         if (navKey) {
-          setActive(navKey);
+          setActiveNavLink(navKey);
         }
 
         event.preventDefault();

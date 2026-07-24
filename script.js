@@ -175,6 +175,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let pointerY = window.innerHeight / 2;
     let lastX = pointerX;
     let lastY = pointerY;
+    // The orb's position is a guess (viewport center) until the first real
+    // pointermove; showing it before then paints a stray blob mid-screen on
+    // scroll-only interactions.
+    let pointerSeen = false;
     let targetScale = 0.92;
     let currentScale = targetScale;
     let framePending = false;
@@ -200,6 +204,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const show = () => {
+      if (!pointerSeen) {
+        return;
+      }
       document.body.classList.add('cursor-active');
       clearTimeout(hideTimeout);
       hideTimeout = setTimeout(() => {
@@ -210,6 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const move = (event) => {
+      pointerSeen = true;
       pointerX = event.clientX;
       pointerY = event.clientY;
 

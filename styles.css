@@ -947,19 +947,6 @@ nav a.is-active {
   will-change: transform;
 }
 
-.section::before {
-  content: '';
-  position: absolute;
-  inset: -40% -20%;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(116, 247, 255, 0.25), transparent 55%),
-    radial-gradient(circle at 80% 10%, rgba(255, 122, 69, 0.18), transparent 45%);
-  mix-blend-mode: screen;
-  opacity: 0.5;
-  animation: sectionGlow 16s linear infinite;
-  pointer-events: none;
-}
-
 .section::after {
   content: '';
   position: absolute;
@@ -1323,16 +1310,6 @@ body.detail-page header::after {
 .highlight::after {
   content: '';
   position: absolute;
-  inset: 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(255, 122, 69, 0.2);
-  opacity: 0;
-  transition: opacity 0.6s ease;
-}
-
-.highlight::after {
-  content: '';
-  position: absolute;
   inset: -40% 60% 70% -40%;
   background: linear-gradient(
     120deg,
@@ -1342,26 +1319,18 @@ body.detail-page header::after {
   );
   transform: translateX(-90%) rotate(9deg);
   transition: transform 0.5s ease;
-}
-
-.highlight:hover {
-  border-color: rgba(255, 122, 69, 0.65);
-  animation: highlightPulse 5s ease-in-out infinite;
-  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(255, 122, 69, 0.2));
-}
-
-.highlight:hover::before {
-  opacity: 1;
-}
-
-.highlight:hover::after {
-  transform: translateX(120%) rotate(9deg);
+  pointer-events: none;
 }
 
 .highlight:hover {
   transform: translateY(-4px);
   border-color: var(--accent);
   background: linear-gradient(125deg, rgba(12, 12, 28, 0.98), rgba(34, 10, 46, 0.94));
+  animation: highlightPulse 5s ease-in-out infinite;
+}
+
+.highlight:hover::before {
+  opacity: 1;
 }
 
 .highlight:hover::after {
@@ -1428,30 +1397,11 @@ body.detail-page header::after {
   border-color: rgba(116, 247, 255, 0.5);
 }
 
-.project-card::after {
-  content: '';
-  position: absolute;
-  inset: -40% 40% 60% -40%;
-  background: linear-gradient(
-    120deg,
-    rgba(116, 247, 255, 0),
-    rgba(116, 247, 255, 0.3),
-    rgba(116, 247, 255, 0)
-  );
-  transform: translateX(-110%) rotate(12deg);
-  transition: transform 0.5s ease;
-  pointer-events: none;
-}
-
 .project-card:hover {
   transform: translateY(-6px) scale(1.01);
   border-color: var(--accent);
   background: linear-gradient(125deg, rgba(4, 7, 18, 1), rgba(24, 8, 32, 0.98));
   box-shadow: 0 32px 80px -40px rgba(116, 247, 255, 0.6);
-}
-
-.project-card:hover::after {
-  transform: translateX(150%) rotate(12deg);
 }
 
 .services-grid {
@@ -2126,21 +2076,6 @@ html.has-js .reveal.is-visible {
   }
   100% {
     box-shadow: 0 0 25px rgba(116, 247, 255, 0.08);
-  }
-}
-
-@keyframes sectionGlow {
-  0% {
-    transform: scale(1) translateY(0);
-    opacity: 0.45;
-  }
-  50% {
-    transform: scale(1.05) translateY(-4px);
-    opacity: 0.7;
-  }
-  100% {
-    transform: scale(1) translateY(0);
-    opacity: 0.45;
   }
 }
 

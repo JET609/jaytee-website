@@ -630,51 +630,33 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const iframe = embed.querySelector('iframe[data-src]');
-    if (!iframe) {
+    const launchButton = embed.querySelector('.spotify-launch');
+    const playlistSrc = embed.dataset.playlistSrc;
+    if (!launchButton || !playlistSrc) {
       return;
     }
 
-    const markLoaded = () => {
-      embed.classList.add('is-loaded');
-    };
-
-    const loadIframe = () => {
-      if (iframe.dataset.loaded === 'true') {
-        return;
-      }
-
-      iframe.dataset.loaded = 'true';
-      const fallbackTimeout = setTimeout(markLoaded, 2200);
-
-      iframe.addEventListener(
-        'load',
-        () => {
-          markLoaded();
-          clearTimeout(fallbackTimeout);
-        },
-        { once: true }
-      );
-
-      iframe.src = iframe.dataset.src;
-    };
-
-    if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver(
-        (entries, observerInstance) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              loadIframe();
-              observerInstance.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.35 }
-      );
-      observer.observe(embed);
-    } else {
-      loadIframe();
-    }
+    // A cross-origin iframe's 'load' event fires whether the navigation
+    // succeeded or was blocked (by an ad blocker or network policy) --
+    // browsers intentionally don't expose that distinction to the embedding
+    // page. So instead of guessing at success, only load on an explicit
+    // click, and always keep a working direct Spotify link next to it as an
+    // unconditional fallback.
+    launchButton.addEventListener(
+      'click',
+      () => {
+        const iframe = document.createElement('iframe');
+        iframe.title = 'Spotify playlist';
+        iframe.width = '100%';
+        iframe.height = '152';
+        iframe.frameBorder = '0';
+        iframe.loading = 'lazy';
+        iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+        iframe.src = playlistSrc;
+        embed.replaceChildren(iframe);
+      },
+      { once: true }
+    );
   }
 
   function initLanguageParticles() {

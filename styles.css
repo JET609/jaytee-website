@@ -614,6 +614,7 @@ html.has-js body.is-ready .hero::before {
     rgba(255, 122, 69, 0.92)
   );
   -webkit-background-clip: text;
+  background-clip: text;
   color: transparent;
   animation: titleGlow 7s ease-in-out infinite;
 }

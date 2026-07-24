@@ -109,6 +109,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initMagneticHover();
   }
 
+  initStatEntrance();
+
   if (settings.enableCounters) {
     initStatCounters();
   }
@@ -929,6 +931,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
       requestAnimationFrame(tick);
     }
+  }
+
+  function initStatEntrance() {
+    // Runs independently of settings.enableCounters -- the hero stat cards
+    // start hidden via CSS (html.has-js .stat) whenever JS is enabled, so
+    // this must always run or the cards would stay invisible forever if
+    // counters are ever turned off in config.js.
+    const cards = Array.from(document.querySelectorAll('.hero-stats .stat'));
+    if (!cards.length) {
+      return;
+    }
+
+    if (!hasMotion()) {
+      cards.forEach((card) => card.classList.add('is-visible'));
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries, ob) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            ob.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.6 }
+    );
+
+    cards.forEach((card) => observer.observe(card));
   }
 
   function initAuroraCanvas() {

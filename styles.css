@@ -774,10 +774,18 @@ html.has-js body.is-ready .hero::before {
   box-shadow: var(--shadow);
   position: relative;
   overflow: hidden;
+  transition: box-shadow 0.4s ease;
+}
+
+html.has-js .stat {
+  opacity: 0;
+  transform: translateY(22px) scale(0.98);
+}
+
+.stat.is-visible {
   animation:
     statEntrance 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--stat-delay, 0s) forwards,
-    floatSlow 18s ease-in-out 1.6s infinite;
-  transition: box-shadow 0.4s ease;
+    floatSlow 18s ease-in-out calc(var(--stat-delay, 0s) + 1s) infinite;
 }
 
 .hero-stats .stat:nth-of-type(1) {

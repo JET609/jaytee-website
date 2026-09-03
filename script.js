@@ -115,13 +115,14 @@ document.addEventListener('DOMContentLoaded', () => {
     initStatCounters();
   }
 
-  if (hasMotion() && settings.enableAurora) {
+  if (hasMotion() && !smallScreen.matches && settings.enableAurora) {
     initAuroraCanvas();
   }
 
   initContentLoaderPlaceholder();
   initSpotifyEmbed();
   initLanguageParticles();
+  initThemeToggle();
 
   function initYear() {
     const yearEl = document.getElementById('year');
@@ -301,8 +302,17 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('pointermove', (event) => {
       const bounds = hero.getBoundingClientRect();
       if (event.clientY < bounds.top - 40 || event.clientY > bounds.bottom + 40) {
+        hero.classList.remove('is-tilt-live');
         return;
       }
+
+      // The rAF loop above already lerps toward the target every frame;
+      // the CSS transform transition is only meant for the entrance
+      // animation and the settle-back on pointer-leave. Keeping it active
+      // while the pointer is inside the hero would re-ease every one of
+      // these per-frame updates on top of the JS lerp, making the tilt
+      // visibly lag behind the cursor.
+      hero.classList.add('is-tilt-live');
 
       const relativeX = (event.clientX - bounds.left) / bounds.width - 0.5;
       const relativeY = (event.clientY - bounds.top) / bounds.height - 0.5;
@@ -313,6 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetTilt = () => {
       targetX = 0;
       targetY = 0;
+      hero.classList.remove('is-tilt-live');
     };
 
     window.addEventListener('pointerleave', resetTilt);
@@ -336,6 +347,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let frame = 0;
     heroTitle.dataset.scrambleActive = 'true';
 
+    // The scramble swaps in random glyphs of varying width every frame,
+    // which can shift the h1's line-wrap points and reflow everything
+    // below it in the hero for the ~1s duration -- a real, measurable
+    // Cumulative Layout Shift. Locking the box to its already-rendered
+    // (final-text) height for the scramble's duration keeps that reflow
+    // contained to the text itself instead of the whole page.
+    heroTitle.style.minHeight = `${heroTitle.offsetHeight}px`;
+
     const update = () => {
       let output = '';
       let complete = 0;
@@ -356,6 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (complete === queue.length) {
         heroTitle.textContent = finalText;
         heroTitle.dataset.scrambleActive = 'false';
+        heroTitle.style.minHeight = '';
       } else {
         frame += 1;
         requestAnimationFrame(update);
@@ -1026,5 +1046,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function initContentLoaderPlaceholder() {
     // Reserved for future dynamic content hooks.
+  }
+
+  function initThemeToggle() {
+    const root = document.documentElement;
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'theme-toggle';
+    button.setAttribute('aria-label', 'Toggle light and dark theme');
+    button.innerHTML =
+      '<svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>' +
+      '<svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>';
+
+    const applyThemeColor = (theme) => {
+      if (themeColorMeta) {
+        themeColorMeta.setAttribute('content', theme === 'light' ? '#f8fafc' : '#020817');
+      }
+    };
+
+    applyThemeColor(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+
+    button.addEventListener('click', () => {
+      const nextTheme = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', nextTheme);
+      applyThemeColor(nextTheme);
+      try {
+        localStorage.setItem('theme', nextTheme);
+      } catch (error) {
+        // Private browsing / storage disabled -- theme just won't persist across visits.
+      }
+    });
+
+    document.body.appendChild(button);
   }
 });

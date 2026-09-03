@@ -1,0 +1,32 @@
+# Netlify header rules. See vercel.json for the Vercel equivalent -- pick
+# whichever matches your host; GitHub Pages supports neither and falls back
+# to the <meta> CSP in index.html/skin-cancer.html only.
+#
+# Strict-Transport-Security is intentionally NOT set here yet. jaytee.world
+# is currently a parked domain, not pointed at a real host -- turning on HSTS
+# before HTTPS is confirmed working can lock out HTTP access for months
+# (up to the max-age you set) with no easy way back. Once the domain is
+# actually serving this site over HTTPS reliably, add:
+#   Strict-Transport-Security: max-age=15552000; includeSubDomains
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src https://open.spotify.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=(), usb=()
+
+# HTML: always revalidate so edits show up immediately, not stuck behind a cache.
+/*.html
+  Cache-Control: no-cache
+/
+  Cache-Control: no-cache
+
+# Vendored libs and static assets change rarely and aren't content-hashed
+# (no build step) -- a moderate cache, not a year-long "immutable" one,
+# since a future update to these filenames wouldn't be picked up until it
+# expires.
+/vendor/*
+  Cache-Control: public, max-age=604800
+/*.png
+  Cache-Control: public, max-age=604800

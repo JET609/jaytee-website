@@ -3,6 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--
+    A meta-delivered CSP can't cover everything (frame-ancestors and
+    X-Frame-Options are HTTP-header-only per spec) -- see _headers /
+    vercel.json for the rest, which apply on Netlify/Vercel. GitHub Pages
+    supports neither custom headers nor this working around it, so this
+    meta tag is the only protection available there.
+  -->
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src https://open.spotify.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
+  />
   <title>Jayanth Eapen Thomas &bull; Portfolio</title>
 
   <meta
@@ -18,36 +29,75 @@
     content="Portfolio website for Jayanth Eapen Thomas &ndash; a developer crafting immersive, animated, and technically sharp digital experiences."
   />
   <meta property="og:url" content="https://jaytee.world" />
-  <meta name="twitter:card" content="summary" />
+  <meta property="og:image" content="https://jaytee.world/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Jayanth Eapen Thomas &bull; Portfolio" />
   <meta
     name="twitter:description"
     content="Portfolio website for Jayanth Eapen Thomas &ndash; a developer crafting immersive, animated, and technically sharp digital experiences."
   />
+  <meta name="twitter:image" content="https://jaytee.world/og-image.png" />
+
+  <link rel="canonical" href="https://jaytee.world/" />
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Jayanth Eapen Thomas",
+    "url": "https://jaytee.world",
+    "jobTitle": "Software Engineer",
+    "alumniOf": "B.Tech Computer Science and Engineering",
+    "sameAs": [
+      "https://github.com/JET609",
+      "https://www.linkedin.com/in/jayanth-e-thomas-027318221/",
+      "https://medium.com/@jayanththomas2004"
+    ]
+  }
+  </script>
 
   <link
     rel="icon"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23020817'/%3E%3Ctext x='32' y='42' font-family='monospace' font-size='30' font-weight='700' text-anchor='middle' fill='%2374f7ff'%3EJ%3C/text%3E%3C/svg%3E"
   />
+  <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+  <link rel="manifest" href="./manifest.json" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
+    rel="preload"
+    as="style"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap"
+  />
+  <link
+    id="google-fonts-stylesheet"
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap"
     rel="stylesheet"
+    media="print"
   />
+  <noscript>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&amp;display=swap"
+      rel="stylesheet"
+    />
+  </noscript>
 
   <link rel="stylesheet" href="./styles.css" />
 
-  <script>
-    document.documentElement.classList.add('has-js');
-  </script>
+  <script src="./theme-init.js"></script>
   <script src="./config.js"></script>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
   <!-- UI chrome -->
   <div class="scroll-tracker" aria-hidden="true"></div>
   <div class="cursor-orb" aria-hidden="true"></div>
+  <canvas class="webgl-bg" aria-hidden="true"></canvas>
   <div class="background-gradient" aria-hidden="true"></div>
   <div class="code-lines" aria-hidden="true"></div>
 
@@ -117,7 +167,7 @@
           <div class="panel-holo" aria-hidden="true"></div>
           <div class="signal-card live-status">
             <span class="signal-pill">Now open to work</span>
-            <h3>B.Tech CSE Graduate, 2026</h3>
+            <h2>B.Tech CSE Graduate, 2026</h2>
             <p>Open to full-time roles &mdash; full-stack builds, ML basics, and polished UIs that just work.</p>
           </div>
           <div class="signal-card availability">
@@ -151,6 +201,7 @@
     <a href="#contact" data-nav-link="contact">Contact</a>
   </nav>
 
+  <main id="main-content">
   <!-- ABOUT -->
   <section id="about" class="section reveal" data-section data-scroll-speed="0.12">
     <div class="glass-card about-grid" data-tilt data-tilt-strength="8" data-tilt-scale="1.01">
@@ -182,7 +233,7 @@
     <p class="lead">A balanced stack for prototyping quickly and maintaining projects long after demo day.</p>
     <div class="skills-grid">
       <div class="skill-card" data-tilt>
-        <h4>Frontend</h4>
+        <h3>Frontend</h3>
         <ul>
           <li>React, Next.js, Vite</li>
           <li>TypeScript, modern JS</li>
@@ -190,7 +241,7 @@
         </ul>
       </div>
       <div class="skill-card" data-tilt>
-        <h4>Backend &amp; infra</h4>
+        <h3>Backend &amp; infra</h3>
         <ul class="tech-token-list">
           <li>
             <span class="tech-token" data-tech="node">Node.js</span>,
@@ -209,7 +260,7 @@
         </ul>
       </div>
       <div class="skill-card" data-tilt>
-        <h4>Data &amp; AI</h4>
+        <h3>Data &amp; AI</h3>
         <ul>
           <li>LLM integration &amp; tooling</li>
           <li>TensorFlow / PyTorch basics</li>
@@ -217,7 +268,7 @@
         </ul>
       </div>
       <div class="skill-card" data-tilt>
-        <h4>Workflow</h4>
+        <h3>Workflow</h3>
         <ul>
           <li>Clean, modular codebases</li>
           <li>Docs &amp; README polish</li>
@@ -294,6 +345,9 @@
           <span class="chip" data-tech="react">React</span>
           <span class="chip" data-tech="javascript">JavaScript</span>
         </div>
+        <div class="project-links">
+          <a class="project-link" href="https://github.com/JET609/portfolio" target="_blank" rel="noopener">View</a>
+        </div>
       </div>
       <div class="project-card" data-tilt>
         <h3>DSA Repo</h3>
@@ -301,6 +355,9 @@
         <div class="chip-row project-tags">
           <span class="chip" data-tech="python">Python</span>
           <span class="chip" data-tech="java">Java</span>
+        </div>
+        <div class="project-links">
+          <a class="project-link" href="https://github.com/JET609/DSA-Practice" target="_blank" rel="noopener">View</a>
         </div>
       </div>
     </div>
@@ -347,11 +404,13 @@
       <a class="spotify-open-link" href="https://open.spotify.com/playlist/37i9dQZF1DX4WYpdgoIcn6" target="_blank" rel="noopener">Open in Spotify &rarr;</a>
     </div>
   </section>
+  </main>
 
   <footer>
     &copy; <span id="year"></span> Jayanth Eapen Thomas &middot; Portfolio crafted with curiosity.
   </footer>
 
   <script src="./script.js"></script>
+  <script type="module" src="./webgl-bg.js"></script>
 </body>
 </html>

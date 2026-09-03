@@ -921,20 +921,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const easeOut = (t) => 1 - Math.pow(1 - t, 3);
 
-    const observer = new IntersectionObserver(
-      (entries, ob) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            animate(entry.target);
-            ob.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.6 }
-    );
-
+    // Same reasoning as initStatEntrance just above: these live in the
+    // hero, which is always visible on load, so they shouldn't wait for a
+    // scroll-triggered IntersectionObserver -- run the count-up directly.
     counters.forEach((counter) => {
-      observer.observe(counter);
+      animate(counter);
     });
 
     function animate(element) {
@@ -968,29 +959,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // start hidden via CSS (html.has-js .stat) whenever JS is enabled, so
     // this must always run or the cards would stay invisible forever if
     // counters are ever turned off in config.js.
+    //
+    // These cards live inside the hero, which is always visible on load --
+    // they used to wait for an IntersectionObserver at threshold 0.6 (the
+    // same scroll-triggered-reveal pattern the .reveal sections further
+    // down the page use), but on a short viewport the hero's own content
+    // above them (name, heading, paragraph, meta, buttons) can push them
+    // far enough down that they never reach 60% visible without a scroll,
+    // leaving them stuck at opacity:0 indefinitely. Above-the-fold content
+    // should just reveal on load, not wait to be scrolled into view.
     const cards = Array.from(document.querySelectorAll('.hero-stats .stat'));
     if (!cards.length) {
       return;
     }
 
-    if (!hasMotion()) {
-      cards.forEach((card) => card.classList.add('is-visible'));
-      return;
-    }
-
-    const observer = new IntersectionObserver(
-      (entries, ob) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-            ob.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.6 }
-    );
-
-    cards.forEach((card) => observer.observe(card));
+    cards.forEach((card) => card.classList.add('is-visible'));
   }
 
   function initAuroraCanvas() {

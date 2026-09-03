@@ -12,8 +12,10 @@ if (canvas) {
   const shouldRun = () => !prefersReducedMotion.matches && !smallScreen.matches && isDarkTheme();
 
   let THREE = null;
+  let PostFX = null;
   let loadPromise = null;
   let renderer = null;
+  let composer = null;
   let scene = null;
   let camera = null;
   let group = null;
@@ -22,8 +24,12 @@ if (canvas) {
   let core = null;
   let ring1 = null;
   let ring2 = null;
+  let comet = null;
+  let cometState = null;
   let rafId = null;
   let lastTime = 0;
+  let nextCometAt = 6 + Math.random() * 6;
+  let elapsed = 0;
   let targetRotX = 0;
   let targetRotY = 0;
   let ndcX = 0;
@@ -258,6 +264,87 @@ if (canvas) {
     core.position.set(0, 0, -6);
   }
 
+  function makeCometTexture() {
+    // A horizontal gradient: solid bright at the head (right edge), fading
+    // to transparent at the tail (left edge). Stretching a plane mapped
+    // with this is far cheaper than a real particle trail and reads just
+    // as well at the size/speed this renders at.
+    const w = 256;
+    const h = 16;
+    const c = document.createElement('canvas');
+    c.width = w;
+    c.height = h;
+    const ctx = c.getContext('2d');
+    const gradient = ctx.createLinearGradient(0, 0, w, 0);
+    gradient.addColorStop(0, 'rgba(255,255,255,0)');
+    gradient.addColorStop(0.75, 'rgba(255,255,255,0.55)');
+    gradient.addColorStop(1, 'rgba(255,255,255,1)');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, w, h);
+    const texture = new THREE.CanvasTexture(c);
+    texture.needsUpdate = true;
+    return texture;
+  }
+
+  function buildComet() {
+    const geometry = new THREE.PlaneGeometry(1, 1);
+    const material = new THREE.MeshBasicMaterial({
+      map: makeCometTexture(),
+      color: 0xbff4ff,
+      transparent: true,
+      opacity: 0,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      side: THREE.DoubleSide
+    });
+    comet = new THREE.Mesh(geometry, material);
+    comet.visible = false;
+    cometState = { active: false, t: 0, duration: 1, start: new THREE.Vector3(), end: new THREE.Vector3(), length: 4 };
+  }
+
+  function spawnComet() {
+    if (!cometState) return;
+    // Straight diagonal pass through the field, from one side to the
+    // other, at a random height/depth so it doesn't retrace the same path.
+    const fromLeft = Math.random() > 0.5;
+    const y = 6 + Math.random() * 6;
+    const z = -14 + Math.random() * 10;
+    const startX = fromLeft ? -16 : 16;
+    const endX = fromLeft ? 16 : -16;
+    cometState.start.set(startX, y, z);
+    cometState.end.set(endX, y - (4 + Math.random() * 4), z);
+    cometState.length = 3.5 + Math.random() * 2.5;
+    cometState.duration = 1 + Math.random() * 0.6;
+    cometState.t = 0;
+    cometState.active = true;
+    comet.visible = true;
+  }
+
+  function updateComet(delta) {
+    if (!cometState || !cometState.active) return;
+    cometState.t += delta;
+    const p = Math.min(1, cometState.t / cometState.duration);
+
+    comet.position.lerpVectors(cometState.start, cometState.end, p);
+
+    const dir = new THREE.Vector3().subVectors(cometState.end, cometState.start).normalize();
+    const angle = Math.atan2(dir.y, dir.x);
+    comet.rotation.set(0, 0, angle);
+    comet.scale.set(cometState.length, 0.09, 1);
+
+    // Fade in over the first 12% of the flight, out over the last 25% --
+    // linear motion (it's constant-velocity, like a real object in
+    // flight) with only the opacity eased at the edges so it doesn't pop.
+    const fadeIn = Math.min(1, p / 0.12);
+    const fadeOut = p > 0.75 ? Math.max(0, 1 - (p - 0.75) / 0.25) : 1;
+    comet.material.opacity = Math.min(fadeIn, fadeOut) * 0.85;
+
+    if (p >= 1) {
+      cometState.active = false;
+      comet.visible = false;
+    }
+  }
+
   function buildRings() {
     const ring1Geometry = new THREE.TorusGeometry(6.2, 0.02, 8, 96);
     const ring1Material = new THREE.MeshBasicMaterial({
@@ -304,13 +391,32 @@ if (canvas) {
     buildLinks(positions);
     buildCore();
     buildRings();
+    buildComet();
 
-    group.add(points, links, core, ring1, ring2);
+    group.add(points, links, core, ring1, ring2, comet);
     scene.add(group);
 
     raycaster.instance = new THREE.Raycaster();
     raycaster.plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 6);
     raycaster.hit = new THREE.Vector3();
+
+    const { EffectComposer, RenderPass, UnrealBloomPass, OutputPass } = PostFX;
+    composer = new EffectComposer(renderer);
+    composer.setPixelRatio(renderer.getPixelRatio());
+    composer.addPass(new RenderPass(scene, camera));
+    const bloomPass = new UnrealBloomPass(
+      new THREE.Vector2(window.innerWidth, window.innerHeight),
+      0.3,  // strength
+      0.3,  // radius
+      0.45  // threshold -- the field is dense and additively blended, so
+            // overlapping particles already read as bright; a low
+            // threshold here made nearly the whole frame bloom and washed
+            // out the DOM text sitting on top of the canvas. Only the
+            // genuinely brightest points (particle cores, the comet)
+            // should bloom.
+    );
+    composer.addPass(bloomPass);
+    composer.addPass(new OutputPass());
   }
 
   function updateMouseWorld() {
@@ -348,6 +454,9 @@ if (canvas) {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    if (composer) {
+      composer.setSize(window.innerWidth, window.innerHeight);
+    }
   }
 
   function animate(now) {
@@ -357,6 +466,7 @@ if (canvas) {
     const time = now * 0.001;
     const delta = lastTime ? Math.min(time - lastTime, 0.1) : 0;
     lastTime = time;
+    elapsed += delta;
 
     group.rotation.y += 0.0009;
     core.rotation.y -= 0.0016;
@@ -383,7 +493,17 @@ if (canvas) {
 
     core.material.uniforms.uTime.value = time;
 
-    renderer.render(scene, camera);
+    if (elapsed >= nextCometAt) {
+      spawnComet();
+      nextCometAt = elapsed + 9 + Math.random() * 10;
+    }
+    updateComet(delta);
+
+    if (composer) {
+      composer.render();
+    } else {
+      renderer.render(scene, camera);
+    }
   }
 
   function startRendering() {
@@ -416,8 +536,20 @@ if (canvas) {
       // is the default), but this keeps light-mode/mobile/reduced-motion
       // visitors from paying for it at all.
       if (!loadPromise) {
-        loadPromise = import('./vendor/three.module.min.js').then((mod) => {
-          THREE = mod;
+        loadPromise = Promise.all([
+          import('./vendor/three.module.min.js'),
+          import('./vendor/postprocessing/EffectComposer.js'),
+          import('./vendor/postprocessing/RenderPass.js'),
+          import('./vendor/postprocessing/UnrealBloomPass.js'),
+          import('./vendor/postprocessing/OutputPass.js')
+        ]).then(([three, effectComposer, renderPass, unrealBloomPass, outputPass]) => {
+          THREE = three;
+          PostFX = {
+            EffectComposer: effectComposer.EffectComposer,
+            RenderPass: renderPass.RenderPass,
+            UnrealBloomPass: unrealBloomPass.UnrealBloomPass,
+            OutputPass: outputPass.OutputPass
+          };
         }).catch(() => {
           failed = true;
         });
@@ -446,11 +578,18 @@ if (canvas) {
       window.removeEventListener('pointerdown', handlePointerDown);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleResize);
+      if (composer) {
+        composer.dispose();
+        composer = null;
+      }
       renderer.dispose();
-      [points, links, core, ring1, ring2].forEach((mesh) => {
+      [points, links, core, ring1, ring2, comet].forEach((mesh) => {
         mesh.geometry.dispose();
         if (mesh.material.uniforms && mesh.material.uniforms.map) {
           mesh.material.uniforms.map.value.dispose();
+        }
+        if (mesh.material.map) {
+          mesh.material.map.dispose();
         }
         mesh.material.dispose();
       });
@@ -463,6 +602,10 @@ if (canvas) {
       core = null;
       ring1 = null;
       ring2 = null;
+      comet = null;
+      cometState = null;
+      elapsed = 0;
+      nextCometAt = 6 + Math.random() * 6;
     }
     canvas.classList.remove('is-active');
   }

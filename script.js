@@ -350,10 +350,19 @@ document.addEventListener('DOMContentLoaded', () => {
     // The scramble swaps in random glyphs of varying width every frame,
     // which can shift the h1's line-wrap points and reflow everything
     // below it in the hero for the ~1s duration -- a real, measurable
-    // Cumulative Layout Shift. Locking the box to its already-rendered
-    // (final-text) height for the scramble's duration keeps that reflow
-    // contained to the text itself instead of the whole page.
-    heroTitle.style.minHeight = `${heroTitle.offsetHeight}px`;
+    // Cumulative Layout Shift, confirmed by instrumenting .hero's actual
+    // rendered height frame-by-frame (it oscillated between two values
+    // roughly a line-height apart, dozens of times, for the whole
+    // scramble). A min-height alone doesn't fully fix it: it stops the
+    // box from shrinking, but scrambled glyphs can still wrap an *extra*
+    // line at some point mid-scramble and grow it, then shrink back --
+    // still oscillating. Locking the exact height plus clipping overflow
+    // makes it truly immovable: if a scrambled frame would need more
+    // room, it's invisibly clipped for that instant rather than
+    // reflowing anything.
+    const lockedHeight = heroTitle.offsetHeight;
+    heroTitle.style.height = `${lockedHeight}px`;
+    heroTitle.style.overflow = 'hidden';
 
     const update = () => {
       let output = '';
@@ -375,7 +384,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (complete === queue.length) {
         heroTitle.textContent = finalText;
         heroTitle.dataset.scrambleActive = 'false';
-        heroTitle.style.minHeight = '';
+        heroTitle.style.height = '';
+        heroTitle.style.overflow = '';
       } else {
         frame += 1;
         requestAnimationFrame(update);

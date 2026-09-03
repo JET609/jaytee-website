@@ -21,9 +21,22 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
+    rel="preload"
+    as="style"
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+  />
+  <link
+    id="google-fonts-stylesheet"
     href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
     rel="stylesheet"
+    media="print"
   />
+  <noscript>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </noscript>
   <link rel="stylesheet" href="./styles.css" />
   <script src="./theme-init.js"></script>
   <script src="./config.js"></script>
@@ -56,7 +69,7 @@
       </div>
       <aside class="detail-hero-card" aria-label="Latest run summary">
         <p class="detail-label">Latest demo run</p>
-        <h3>5 lesions · 60% avg malignant score</h3>
+        <h2>5 lesions · 60% avg malignant score</h2>
         <ul>
           <li><span>3x</span> flagged as <strong>Cancer</strong> (≥50%)</li>
           <li><span>2x</span> tracked as <strong>Not Cancer</strong></li>
@@ -73,27 +86,27 @@
       <p class="lead">Every run leaves a defensible paper trail for teammates, professors, or clinicians reviewing the pipeline.</p>
       <div class="detail-grid">
         <div class="detail-card">
-          <h4>Prediction cards</h4>
+          <h3>Prediction cards</h3>
           <p>Cancer vs Not Cancer labels, confidence bars, and filename overlays rendered in a cinematic gallery.</p>
         </div>
         <div class="detail-card">
-          <h4>Dark gallery</h4>
+          <h3>Dark gallery</h3>
           <p>Lesion tiles are aligned, labeled, and exported as <code>pred_gallery.png</code> for quick sharing.</p>
         </div>
         <div class="detail-card">
-          <h4>Risk strip</h4>
+          <h3>Risk strip</h3>
           <p>Top 3 lesions sorted by malignant probability with warning borders and percent callouts.</p>
         </div>
         <div class="detail-card">
-          <h4>Summary panel</h4>
+          <h3>Summary panel</h3>
           <p>Pie chart + histogram showing benign vs malignant counts and the probability distribution.</p>
         </div>
         <div class="detail-card">
-          <h4>Structured CSV</h4>
+          <h3>Structured CSV</h3>
           <p><code>predictions.csv</code> lists filename, class, malignant %, and benign % for downstream QA.</p>
         </div>
         <div class="detail-card">
-          <h4>ZIP evidence</h4>
+          <h3>ZIP evidence</h3>
           <p>Cards, charts, and CSV are bundled into <code>skin_cancer_outputs.zip</code> with a manual download button.</p>
         </div>
       </div>
@@ -103,7 +116,7 @@
       <h2>Latest report snapshot</h2>
       <div class="result-grid">
         <div class="detail-card">
-          <h4>Prediction table</h4>
+          <h3>Prediction table</h3>
           <table class="result-table">
             <thead>
               <tr>
@@ -142,7 +155,7 @@
           </table>
         </div>
         <div class="detail-card">
-          <h4>Report callouts</h4>
+          <h3>Report callouts</h3>
           <ul class="result-list">
             <li>Average malignant confidence hovered at <strong>60.1%</strong>.</li>
             <li>ZIP delivery keeps reviewers from hunting through multiple tabs.</li>

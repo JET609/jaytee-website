@@ -101,7 +101,12 @@ if (canvas) {
 
       vec4 mvPosition = modelViewMatrix * vec4(pos, 1.0);
       gl_Position = projectionMatrix * mvPosition;
-      gl_PointSize = aSize * uBaseSize * (320.0 / -mvPosition.z);
+      // Particles are scattered through a volume that can put a few of them
+      // right in front of the camera; dividing by their raw distance let
+      // those blow up into huge glowing blobs. Floor the distance and cap
+      // the result so every particle stays a small point, near or far.
+      float camDist = max(-mvPosition.z, 4.0);
+      gl_PointSize = clamp(aSize * uBaseSize * (320.0 / camDist), 1.0, 24.0);
     }
   `;
 

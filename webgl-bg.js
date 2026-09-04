@@ -35,6 +35,9 @@ if (canvas) {
   let ndcX = 0;
   let ndcY = 0;
   let scrollFraction = 0;
+  let scrollVelocity = 0;
+  let lastScrollY = 0;
+  let lastScrollTime = 0;
   let wantsToRun = false;
   let failed = false;
   const raycaster = { instance: null, plane: null, hit: null };
@@ -447,6 +450,24 @@ if (canvas) {
   function handleScroll() {
     const max = document.documentElement.scrollHeight - window.innerHeight;
     scrollFraction = max > 0 ? window.scrollY / max : 0;
+
+    const now = performance.now();
+    if (lastScrollTime === 0) {
+      // First call (fired once at startup): establish the baseline instead
+      // of computing velocity from an untracked scroll position, which
+      // would otherwise register as a false jump if the page was already
+      // scrolled before the WebGL scene finished loading.
+      lastScrollY = window.scrollY;
+      lastScrollTime = now;
+      return;
+    }
+    const dt = Math.max(now - lastScrollTime, 1);
+    const dy = window.scrollY - lastScrollY;
+    // Clamped so a huge jump-scroll can't spike the rotation speed --
+    // this only nudges the existing idle rotation, never replaces it.
+    scrollVelocity = Math.max(-2.5, Math.min(2.5, scrollVelocity + (dy / dt) * 0.6));
+    lastScrollY = window.scrollY;
+    lastScrollTime = now;
   }
 
   function handleResize() {
@@ -468,11 +489,13 @@ if (canvas) {
     lastTime = time;
     elapsed += delta;
 
-    group.rotation.y += 0.0009;
+    scrollVelocity *= 0.92;
+
+    group.rotation.y += 0.0009 + scrollVelocity * 0.0025;
     core.rotation.y -= 0.0016;
     core.rotation.x += 0.0007;
-    ring1.rotation.z += 0.0012;
-    ring2.rotation.z -= 0.0009;
+    ring1.rotation.z += 0.0012 + Math.abs(scrollVelocity) * 0.002;
+    ring2.rotation.z -= 0.0009 + Math.abs(scrollVelocity) * 0.0018;
 
     camera.rotation.y += (targetRotY - camera.rotation.y) * 0.04;
     camera.rotation.x += (targetRotX - camera.rotation.x) * 0.04;
@@ -573,6 +596,8 @@ if (canvas) {
       rafId = null;
     }
     lastTime = 0;
+    scrollVelocity = 0;
+    lastScrollTime = 0;
     if (renderer) {
       window.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('pointerdown', handlePointerDown);

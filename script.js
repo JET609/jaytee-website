@@ -109,6 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
     initMagneticHover();
   }
 
+  if (hasMotion() && pointerFine.matches) {
+    initChipSpotlight();
+  }
+
+  initPageTransitions();
+
   initStatEntrance();
 
   if (settings.enableCounters) {
@@ -686,6 +692,10 @@ document.addEventListener('DOMContentLoaded', () => {
         iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
         iframe.src = playlistSrc;
         embed.replaceChildren(iframe);
+        const eq = document.querySelector('.spotify-eq');
+        if (eq) {
+          eq.hidden = false;
+        }
       },
       { once: true }
     );
@@ -847,6 +857,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const rect = element.getBoundingClientRect();
       const relativeX = (event.clientX - rect.left) / rect.width - 0.5;
       const relativeY = (event.clientY - rect.top) / rect.height - 0.5;
+      element.style.setProperty('--spot-x', `${((relativeX + 0.5) * 100).toFixed(1)}%`);
+      element.style.setProperty('--spot-y', `${((relativeY + 0.5) * 100).toFixed(1)}%`);
       const strength = parseFloat(element.dataset.tiltStrength || settings.tiltStrength);
       const scale = parseFloat(element.dataset.tiltScale || settings.tiltScale || 1.015);
       const translateMax = settings.tiltMaxTranslation;
@@ -877,6 +889,74 @@ document.addEventListener('DOMContentLoaded', () => {
       element.addEventListener('pointermove', handlePointerMove);
       element.addEventListener('pointerleave', reset);
       element.addEventListener('blur', reset);
+    });
+  }
+
+  function initChipSpotlight() {
+    const chips = Array.from(document.querySelectorAll('.chip[data-tech], .tech-token[data-tech]'));
+    if (!chips.length) {
+      return;
+    }
+
+    chips.forEach((chip) => {
+      chip.addEventListener('pointermove', (event) => {
+        const rect = chip.getBoundingClientRect();
+        const x = ((event.clientX - rect.left) / rect.width) * 100;
+        const y = ((event.clientY - rect.top) / rect.height) * 100;
+        chip.style.setProperty('--spot-x', `${x.toFixed(1)}%`);
+        chip.style.setProperty('--spot-y', `${y.toFixed(1)}%`);
+      });
+    });
+  }
+
+  function initPageTransitions() {
+    const overlay = document.querySelector('.page-transition');
+    if (!overlay || !hasMotion()) {
+      return;
+    }
+
+    const links = Array.from(document.querySelectorAll('a[href]')).filter((link) => {
+      if (link.target === '_blank' || link.hasAttribute('download')) {
+        return false;
+      }
+      let url;
+      try {
+        url = new URL(link.href, window.location.href);
+      } catch (error) {
+        return false;
+      }
+      if (url.origin !== window.location.origin) {
+        return false;
+      }
+      if (url.pathname === window.location.pathname && url.hash) {
+        return false;
+      }
+      return /\.html?$/.test(url.pathname);
+    });
+
+    if (!links.length) {
+      return;
+    }
+
+    links.forEach((link) => {
+      link.addEventListener('click', (event) => {
+        if (
+          event.defaultPrevented ||
+          event.button !== 0 ||
+          event.metaKey ||
+          event.ctrlKey ||
+          event.shiftKey ||
+          event.altKey
+        ) {
+          return;
+        }
+        event.preventDefault();
+        const destination = link.href;
+        overlay.classList.add('is-leaving');
+        window.setTimeout(() => {
+          window.location.href = destination;
+        }, 450);
+      });
     });
   }
 
@@ -919,7 +999,13 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+    // easeOutBack: overshoots past the target value before settling back,
+    // giving the count-up a satisfying "pop" instead of a flat landing.
+    const easeOut = (t) => {
+      const c1 = 1.70158;
+      const c3 = c1 + 1;
+      return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
+    };
 
     // Same reasoning as initStatEntrance just above: these live in the
     // hero, which is always visible on load, so they shouldn't wait for a

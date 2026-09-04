@@ -237,6 +237,34 @@ body.cursor-active .cursor-orb {
   opacity: 0.7;
 }
 
+.page-transition {
+  display: none;
+}
+
+html.has-js .page-transition {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: #04060b;
+  clip-path: inset(0 0 0% 0);
+  pointer-events: none;
+  transition: clip-path 0.5s var(--ease-in-out);
+}
+
+html.has-js body.is-ready .page-transition {
+  clip-path: inset(0 0 100% 0);
+}
+
+html.has-js .page-transition.is-leaving {
+  clip-path: inset(0 0 0% 0);
+  transition: clip-path 0.45s var(--ease-in-out);
+}
+
+[data-theme='light'] .page-transition {
+  background: #f8fafc;
+}
+
 header {
   position: relative;
   min-height: 92vh;
@@ -504,6 +532,24 @@ html.has-js body.is-ready .hero {
   box-shadow: 0 12px 28px var(--chip-shadow, rgba(2, 6, 23, 0.65));
   font-weight: 600;
   letter-spacing: 0.01em;
+  position: relative;
+  overflow: hidden;
+}
+
+.chip[data-tech]::before,
+.tech-token[data-tech]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(50px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(255, 255, 255, 0.4), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+.chip[data-tech]:hover::before,
+.tech-token[data-tech]:hover::before {
+  opacity: 1;
 }
 
 .chip[data-tech]:hover {
@@ -517,11 +563,15 @@ html.has-js body.is-ready .hero {
   overflow: hidden;
 }
 
+.tech-chips .chip::before {
+  content: none;
+}
+
 .tech-chips .chip::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.34), transparent 60%);
+  background: radial-gradient(60px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(255, 255, 255, 0.34), transparent 60%);
   opacity: 0;
   transition: opacity 0.35s ease;
 }
@@ -1600,6 +1650,21 @@ body.detail-page header::after {
   isolation: isolate;
 }
 
+.project-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(340px circle at var(--spot-x, 50%) var(--spot-y, 50%), rgba(116, 247, 255, 0.18), transparent 62%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.project-card.is-tilting::before {
+  opacity: 1;
+}
+
 .project-card::after,
 .contact-card::after {
   content: '';
@@ -1718,6 +1783,53 @@ body.detail-page header::after {
   box-shadow: 0 35px 90px -70px rgba(29, 185, 84, 0.9);
 }
 
+.spotify-meta .detail-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spotify-eq {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 10px;
+}
+
+.spotify-eq span {
+  width: 3px;
+  height: 100%;
+  border-radius: 2px;
+  background: #1db954;
+  animation: eqBounce 0.9s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+.spotify-eq span:nth-child(1) {
+  animation-delay: -0.6s;
+}
+
+.spotify-eq span:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.spotify-eq span:nth-child(3) {
+  animation-delay: -0.75s;
+}
+
+.spotify-eq span:nth-child(4) {
+  animation-delay: -0.15s;
+}
+
+@keyframes eqBounce {
+  0%, 100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
 .spotify-meta h4 {
   margin: 4px 0 6px;
   font-size: 1.2rem;
@@ -1822,6 +1934,9 @@ body.detail-page header::after {
 }
 
 .contact-options a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   padding: 9px 18px;
   border-radius: 999px;
   border: 1px solid rgba(15, 23, 42, 0.85);
@@ -1831,6 +1946,16 @@ body.detail-page header::after {
   font-size: 0.86rem;
   background: rgba(248, 250, 252, 0.98);
   transition: all 0.22s ease;
+}
+
+.contact-icon {
+  display: inline-flex;
+  transform: translateX(0);
+  transition: transform 0.25s var(--ease-out, ease);
+}
+
+.contact-options a:hover .contact-icon {
+  transform: translateX(3px);
 }
 
 .contact-options a[data-platform='email'] {

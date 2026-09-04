@@ -2197,10 +2197,11 @@ html.has-js .reveal.is-visible {
     padding: 120px 16px 70px;
   }
   .hero-grid {
-    grid-template-columns: 1fr;
-  }
-  .hero-panel {
-    order: -1;
+    /* minmax(0, 1fr), not bare 1fr -- a grid item's default min-width:auto
+       won't let it shrink below its content's intrinsic minimum, and the
+       3-column hero-stats row has a ~486px floor that would otherwise drag
+       the whole hero wider than the viewport on every phone-width screen. */
+    grid-template-columns: minmax(0, 1fr);
   }
   .hero-copy {
     text-align: center;

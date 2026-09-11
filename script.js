@@ -129,6 +129,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initSpotifyEmbed();
   initLanguageParticles();
   initThemeToggle();
+  initGalaxyToggle();
+  initSideRail();
 
   function initYear() {
     const yearEl = document.getElementById('year');
@@ -1087,6 +1089,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function initContentLoaderPlaceholder() {
     // Reserved for future dynamic content hooks.
+  }
+
+  function initSideRail() {
+    const rail = document.querySelector('[data-side-rail]');
+    const nav = document.querySelector('nav');
+    if (!rail || !nav) {
+      return;
+    }
+
+    const update = () => {
+      const navRect = nav.getBoundingClientRect();
+      rail.classList.toggle('is-merged', navRect.top <= 8);
+    };
+
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+  }
+
+  function initGalaxyToggle() {
+    const canvas = document.querySelector('.webgl-bg');
+    if (!canvas) {
+      return;
+    }
+
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'galaxy-toggle';
+    button.setAttribute('aria-label', 'View fullscreen galaxy background');
+    button.innerHTML =
+      '<svg class="icon-sparkle" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"></path></svg>' +
+      '<svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"></path></svg>';
+
+    button.addEventListener('click', () => {
+      const isActive = document.body.classList.toggle('is-galaxy-mode');
+      button.setAttribute(
+        'aria-label',
+        isActive ? 'Exit fullscreen galaxy view' : 'View fullscreen galaxy background'
+      );
+    });
+
+    document.body.appendChild(button);
   }
 
   function initThemeToggle() {

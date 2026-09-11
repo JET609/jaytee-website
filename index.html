@@ -93,6 +93,10 @@
 </head>
 <body>
   <div class="page-transition" aria-hidden="true"></div>
+  <div class="side-rail" data-side-rail>
+    <a class="side-rail-link" href="./resume.pdf" target="_blank" rel="noopener">Resume</a>
+    <a class="side-rail-link" href="#contact">Contact me</a>
+  </div>
   <a class="skip-link" href="#main-content">Skip to content</a>
 
   <!-- UI chrome -->
@@ -111,13 +115,14 @@
           <div class="hero-badge" data-tilt data-tilt-strength="10" data-tilt-scale="1.02">
             B.Tech CSE &bull; Class of 2026
           </div>
-          <p class="hero-name">Jayanth Eapen Thomas</p>
-          <h1>Software engineer obsessed with software, systems, and curious builds.</h1>
-          <p>
-            I&rsquo;m Jayanth, a B.Tech CSE graduate who treats side projects like mini products. Most weeks I&rsquo;m either
-            building ML prototypes, refining web dashboards, or scripting away repetitive chores—then documenting
-            everything so it&rsquo;s reproducible.
-          </p>
+          <h1>Jayanth Eapen Thomas</h1>
+          <p>Software engineer building AI, automation, and web systems &mdash; documented, reproducible, and shipped.</p>
+          <div class="chip-row hero-chips">
+            <span class="chip" data-tech="python">Python</span>
+            <span class="chip" data-tech="react">React</span>
+            <span class="chip" data-tech="tensorflow">TensorFlow</span>
+            <span class="chip" data-tech="docker">Docker</span>
+          </div>
           <ul class="hero-meta">
             <li>B.Tech CSE Graduate · Kerala, India (IST)</li>
             <li>AI · Web · Automation · Systems</li>
@@ -199,8 +204,10 @@
     <a href="#about" data-nav-link="about">About</a>
     <a href="#skills" data-nav-link="skills">Skills</a>
     <a href="#experience" data-nav-link="experience">Experience</a>
+    <a href="#now" data-nav-link="now">Now</a>
     <a href="#projects" data-nav-link="projects">Projects</a>
     <a href="#contact" data-nav-link="contact">Contact</a>
+    <a class="nav-resume" href="./resume.pdf" target="_blank" rel="noopener">Resume</a>
   </nav>
 
   <main id="main-content">
@@ -312,6 +319,17 @@
         <h3>Foundations</h3>
         <p>Python, C, and automation scripts for friends—discovering how fun it is to solve tiny annoyances with code.</p>
       </div>
+    </div>
+  </section>
+
+  <!-- NOW -->
+  <section id="now" class="section reveal" data-section data-scroll-speed="0.1">
+    <div class="glass-card now-card" data-tilt data-tilt-strength="6" data-tilt-scale="1.01">
+      <p class="detail-label">Right now</p>
+      <p class="lead">
+        A snapshot of what I&rsquo;m actually spending time on this month &mdash; updated occasionally instead of
+        left to rot near the top of the resume&rsquo;s &ldquo;skills&rdquo; pages.
+      </p>
     </div>
   </section>
 

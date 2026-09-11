@@ -995,49 +995,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function initStatCounters() {
     const counters = Array.from(document.querySelectorAll('[data-count-to]'));
-    if (!counters.length) {
-      return;
-    }
-
-    // easeOutBack: overshoots past the target value before settling back,
-    // giving the count-up a satisfying "pop" instead of a flat landing.
-    const easeOut = (t) => {
-      const c1 = 1.70158;
-      const c3 = c1 + 1;
-      return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2);
-    };
-
-    // Same reasoning as initStatEntrance just above: these live in the
-    // hero, which is always visible on load, so they shouldn't wait for a
-    // scroll-triggered IntersectionObserver -- run the count-up directly.
     counters.forEach((counter) => {
-      animate(counter);
+      const target = counter.dataset.countTo;
+      const suffix = counter.dataset.countSuffix || '';
+      counter.textContent = `${target}${suffix}`;
     });
-
-    function animate(element) {
-      const target = Number(element.dataset.countTo);
-      if (Number.isNaN(target)) {
-        return;
-      }
-      const suffix = element.dataset.countSuffix || '';
-      const duration = Number(element.dataset.countDuration || settings.counterDuration);
-      const start = performance.now();
-
-      const tick = (now) => {
-        const progress = Math.min(1, (now - start) / duration);
-        const eased = easeOut(progress);
-        const value = Math.round(target * eased);
-        element.textContent = `${value}${suffix}`;
-
-        if (progress < 1) {
-          requestAnimationFrame(tick);
-        } else {
-          element.textContent = `${target}${suffix}`;
-        }
-      };
-
-      requestAnimationFrame(tick);
-    }
   }
 
   function initStatEntrance() {

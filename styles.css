@@ -886,10 +886,9 @@ html.has-js .stat {
   transform: translateY(22px) scale(0.98);
 }
 
-.stat.is-visible {
-  animation:
-    statEntrance 0.9s cubic-bezier(0.22, 1, 0.36, 1) var(--stat-delay, 0s) forwards,
-    floatSlow 18s ease-in-out calc(var(--stat-delay, 0s) + 1s) infinite;
+html.has-js .stat.is-visible {
+  opacity: 1;
+  transform: none;
 }
 
 .hero-stats .stat:nth-of-type(1) {
@@ -2088,11 +2087,6 @@ html.has-js .reveal.is-visible {
   100% { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
-@keyframes floatSlow {
-  0%,100% { transform: translateY(-3px); }
-  50% { transform: translateY(4px); }
-}
-
 @keyframes sheen {
   0%,100% { transform: translateY(110%); }
   40%,60% { transform: translateY(-8%); }
@@ -2105,21 +2099,6 @@ html.has-js .reveal.is-visible {
 
 @keyframes spinner {
   to { transform: rotate(360deg); }
-}
-
-@keyframes statEntrance {
-  0% {
-    opacity: 0;
-    transform: translateY(22px) scale(0.98);
-  }
-  60% {
-    opacity: 1;
-    transform: translateY(-6px) scale(1.01);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
 }
 
 @keyframes haloShift {
